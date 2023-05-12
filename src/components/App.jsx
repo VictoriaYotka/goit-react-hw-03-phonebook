@@ -13,6 +13,18 @@ export class App extends Component {
     filter: ''
   }
 
+  componentDidMount () {
+    const savedContacts = JSON.parse(localStorage.getItem('contacts'))
+
+    if (savedContacts) {
+      this.setState({contacts: savedContacts})
+    }    
+  }
+
+  componentDidUpdate () {
+    localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+  }
+
   
   handleSubmit = (e) => {
     const form = e.currentTarget;
@@ -25,12 +37,8 @@ export class App extends Component {
     };
 
     if(this.state.contacts.find(({name}) => name === newContact.name)) {
-      // console.log(this.state.contacts.find(({name}) => name === newContact.name))
-
       alert (`${newContact.name} is already in contacts`)
 
-      
-      // form.reset()
     } else {
       this.setState((prevState) => ({
         contacts: [...prevState.contacts, newContact]
